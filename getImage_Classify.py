@@ -1,5 +1,10 @@
 # coding:utf-8
-import requests, Image, random, caffe, shutil, os
+import requests
+from PIL import Image
+import random
+import caffe
+import shutil
+import os
 
 labels = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ"
 model_def = "deploy.prototxt"
@@ -37,9 +42,11 @@ def classify():
         filename = "image/tmp" + str(i) + ".jpg"
         im = caffe.io.load_image(filename, False)
         transformed_image = transformer.preprocess('data', im)
-        net.blobs['data'].data[...] = transformed_image
-        output = net.forward()
-        output_prob = output['prob'][0]
+        net.blobs['data'].data[i, ...] = transformed_image
+    output = net.forward()
+    for i in [0, 1, 2, 3]:
+        filename = "image/tmp" + str(i) + ".jpg"
+        output_prob = output['prob'][i]
         result = labels[output_prob.argmax()]
         shutil.move(filename, "image/" + result + "/" + str(index) + ".jpg")
         index += 1
@@ -48,10 +55,12 @@ def classify():
 if __name__ == "__main__":
     caffe.set_mode_cpu()
     net = caffe.Net(model_def, model_weights, caffe.TEST)
+    net.blobs['data'].reshape(4, 1, 20, 20)
+    net.reshape()
     transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
     transformer.set_transpose('data', (2, 0, 1))
 
-    while (index < 1000):
+    while (index < 4):
         getImage()
         classify()
     os.remove("image/tmp.jpg")

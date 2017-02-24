@@ -30,6 +30,8 @@ model_def = "deploy.prototxt"
 model_weights = "misustc_iter.caffemodel"
 caffe.set_mode_cpu()
 net = caffe.Net(model_def, model_weights, caffe.TEST)
+net.blobs['data'].reshape(4, 1, 20, 20)
+net.reshape()
 transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
 transformer.set_transpose('data', (2, 0, 1))
 

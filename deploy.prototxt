@@ -3,7 +3,7 @@ layer {
   name: "mnist"
   type: "Input"
   top: "data"
-  input_param { shape: { dim: 17 dim: 1 dim: 20 dim: 20 } }
+  input_param { shape: { dim: 20 dim: 1 dim: 20 dim: 20 } }
 }
 layer {
   name: "conv1"
