@@ -1,0 +1,1 @@
+"E:\0DeepLearning\caffe_vs2015\build\tools\Release\caffe.exe" train --solver=lenet_solver.prototxt

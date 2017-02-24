@@ -1,0 +1,2 @@
+"E:\0DeepLearning\caffe_vs2013\Build\x64\Release\convert_imageset.exe" --gray=true --shuffle train\ train\train.txt train_lmdb
+"E:\0DeepLearning\caffe_vs2013\Build\x64\Release\convert_imageset.exe" --gray=true --shuffle test\ test\test.txt test_lmdb
