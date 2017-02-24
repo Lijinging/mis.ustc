@@ -1,16 +1,17 @@
 # coding:utf-8
 
 import caffe
-import Image
+from PIL import Image
 import requests
 import os
 import matplotlib.pyplot as plt
 import numpy as np
 
 # 获取验证码并转换成灰度图存储
-url = "http://mis.teach.ustc.edu.cn/randomImage.do?date='51566564654'"
-req = requests.get(url)
 table = [0 if i < 120 else i for i in xrange(256)]
+
+url = "http://mis.teach.ustc.edu.cn/randomImage.do?date='" + str(np.random.randint(2147483647)) + "'"
+req = requests.get(url)
 try:
     with open("tmp.jpg", 'wb') as file:
         file.write(req.content)
@@ -60,7 +61,7 @@ def vis_square(data):  # 显示卷积操作的结果
     plt.show()
 
 
-needShow = True
+needShow = False
 
 # 输入数据
 for i in [0, 1, 2, 3]:
@@ -70,11 +71,13 @@ for i in [0, 1, 2, 3]:
 # 进行预测
 output = net.forward()
 
+for i in [0, 1, 2, 3]:
+    output_prob = output['prob'][i]
+    result.append(labels[output_prob.argmax()])
 # 显示内部状态
 if needShow:
     for i in [0, 1, 2, 3]:
         output_prob = output['prob'][i]
-        result.append(labels[output_prob.argmax()])
         print 'predicted class is:', output_prob.argmax()
         print 'output label:', labels[output_prob.argmax()]
         top_inds = output_prob.argsort()[::-1][:5]
@@ -109,7 +112,7 @@ if needShow:
         plt.show()
 
 img.show()
-print result
+print "".join(result)
 
 os.remove("tmp.jpg")
 os.remove("tmp0.jpg")
