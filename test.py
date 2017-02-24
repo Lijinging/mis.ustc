@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # 获取验证码并转换成灰度图存储
-table = [0 if i < 120 else i for i in xrange(256)]
+table = [255 if i > 140 else i for i in xrange(256)]
 
 url = "http://mis.teach.ustc.edu.cn/randomImage.do?date='" + str(np.random.randint(2147483647)) + "'"
 req = requests.get(url)
